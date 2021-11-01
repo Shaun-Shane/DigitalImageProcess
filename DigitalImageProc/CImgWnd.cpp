@@ -10,7 +10,8 @@
 
 IMPLEMENT_DYNAMIC(CImgWnd, CWnd)
 
-CImgWnd::CImgWnd(CWnd* pParent, RECT rect, LPCTSTR pName, CImage* _pImg): CWnd(), pImg(_pImg), hPos(0), vPos(0)
+CImgWnd::CImgWnd(CWnd* pParent, RECT rect, LPCTSTR pName, CImage* _pImg): 
+	CWnd(), pImg(_pImg), scrollH(0), scrollV(0),isMouseDown(false)
 {
 	static int cntWnd = 0;
 	CWnd::Create(AfxRegisterWndClass(NULL), pName, WS_SIZEBOX | WS_CLIPSIBLINGS | WS_CHILD | WS_CAPTION | WS_VISIBLE | WS_BORDER | WS_HSCROLL | WS_VSCROLL, rect, pParent, ++cntWnd);
@@ -41,6 +42,11 @@ BEGIN_MESSAGE_MAP(CImgWnd, CWnd)
 	ON_WM_VSCROLL()
 	ON_WM_SIZE()
 	ON_WM_MOUSEWHEEL()
+	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_MOUSELEAVE()
+	ON_WM_MOUSELEAVE()
 END_MESSAGE_MAP()
 
 
@@ -66,7 +72,7 @@ void CImgWnd::OnPaint()
 
 	//绘制图像
 	dc.FillSolidRect(rectWndDraw, RGB(255, 255, 255));
-	pImg->Draw(dc.GetSafeHdc(), -hPos, -vPos); // 改成 scroll 的 pos
+	pImg->Draw(dc.GetSafeHdc(), -scrollH, -scrollV); // 改成 scroll 的 pos
 }
 
 
@@ -149,9 +155,9 @@ void CImgWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	// Set the new position of the thumb (scroll box).
 	SetScrollPos(SB_HORZ, curpos);
-	ScrollWindow(hPos - curpos, 0);
+	ScrollWindow(scrollH - curpos, 0);
 
-	hPos = curpos;
+	scrollH = curpos;
 	UpdateWindow();
 
 	CWnd::OnHScroll(nSBCode, nPos, pScrollBar);
@@ -227,9 +233,9 @@ void CImgWnd::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	// Set the new position of the thumb (scroll box).
 	SetScrollPos(SB_VERT, curpos);
-	ScrollWindow(0, vPos - curpos);
+	ScrollWindow(0, scrollV - curpos);
 
-	vPos = curpos;
+	scrollV = curpos;
 	UpdateWindow();
 
 	CWnd::OnVScroll(nSBCode, nPos, pScrollBar);
@@ -254,13 +260,10 @@ void CImgWnd::OnSize(UINT nType, int cx, int cy)
 
 	int curH = GetScrollPos(SB_HORZ);
 	int curV = GetScrollPos(SB_VERT);
-	if (curH < hPos || curV < vPos) {
-		ScrollWindow(hPos - curH, 0);
-		ScrollWindow(0, vPos - curV);
-	}
-
-	hPos = GetScrollPos(SB_HORZ);
-	vPos = GetScrollPos(SB_VERT);
+	if (curH < scrollH) ScrollWindow(scrollH - curH, 0);
+	if (curV < scrollV) ScrollWindow(0, scrollV - curV);
+	scrollH = GetScrollPos(SB_HORZ);
+	scrollV = GetScrollPos(SB_VERT);
 	UpdateWindow();
 }
 
@@ -268,10 +271,50 @@ void CImgWnd::OnSize(UINT nType, int cx, int cy)
 BOOL CImgWnd::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	int curpos = max(0, min(GetScrollLimit(SB_VERT), vPos - zDelta / 2));
+	int curpos = max(0, min(GetScrollLimit(SB_VERT), scrollV - zDelta / 2));
 	SetScrollPos(SB_VERT, curpos);
-	ScrollWindow(0, vPos - curpos);
-	vPos = curpos;
+	ScrollWindow(0, scrollV - curpos);
+	scrollV = curpos;
 	UpdateWindow();
 	return CWnd::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+
+void CImgWnd::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	
+	if (isMouseDown) {
+		int maxposH = GetScrollLimit(SB_HORZ);
+		int maxposV = GetScrollLimit(SB_VERT);
+		
+		int curH = max(0, min(maxposH, scrollH - (point.x - cursorX)));
+		int curV = max(0, min(maxposV, scrollV - (point.y - cursorY)));
+		SetScrollPos(SB_VERT, curV);
+		SetScrollPos(SB_HORZ, curH);
+		ScrollWindow(-curH + scrollH, -curV + scrollV);
+
+		cursorX = point.x;
+		cursorY = point.y;
+		scrollH  = curH;
+		scrollV = curV;
+		UpdateWindow();
+	}
+	CWnd::OnMouseMove(nFlags, point);
+}
+
+
+void CImgWnd::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	isMouseDown = true;
+	CWnd::OnLButtonDown(nFlags, point);
+}
+
+
+void CImgWnd::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	isMouseDown = false;
+	CWnd::OnLButtonUp(nFlags, point);
 }
