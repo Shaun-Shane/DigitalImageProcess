@@ -46,7 +46,6 @@ BEGIN_MESSAGE_MAP(CImgWnd, CWnd)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSELEAVE()
-	ON_WM_MOUSELEAVE()
 END_MESSAGE_MAP()
 
 
@@ -307,7 +306,10 @@ void CImgWnd::OnMouseMove(UINT nFlags, CPoint point)
 void CImgWnd::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	SetCapture();
 	isMouseDown = true;
+	cursorX = point.x;
+	cursorY = point.y;
 	CWnd::OnLButtonDown(nFlags, point);
 }
 
@@ -316,5 +318,7 @@ void CImgWnd::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	isMouseDown = false;
+	ReleaseCapture();
 	CWnd::OnLButtonUp(nFlags, point);
 }
+

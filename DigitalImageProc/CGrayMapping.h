@@ -18,18 +18,23 @@ public:
     void ReadData(CString strBKFileName) {
         std::string s = (CStringA)strBKFileName;
         const char* p = s.c_str();
+        
         FILE* fp = fopen(p, "rb");
         if (!fp) {
             AfxMessageBox(_T("´ò¿ªÍ¼ÏñÊ§°Ü!"));
             return;
         }
-        unsigned long w = 0, h = 0;
+        
+        unsigned long w = 0, h = 0; 
         fread(&w, 4, 1, fp);
         fread(&h, 4, 1, fp);
+        
         nHeight = h, nWidth = w;
+        
         pSPixels = new S[nHeight * nWidth] { 0 };
-        fread(pSPixels, 2, nHeight * nWidth, fp);                    
         pPixels = new T[nHeight * nWidth]{ 0 };
+        fread(pSPixels, 2, nHeight * nWidth, fp);                    
+        
         fclose(fp);
     }
 
