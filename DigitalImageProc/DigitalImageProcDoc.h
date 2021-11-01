@@ -10,6 +10,8 @@
 #include "CTranslateDlg.h"
 #include "CZoomDlg.h"
 #include "CRotateDlg.h"
+#include "CGrayMapping.h"
+#include "CMappingDlg.h"
 class CDigitalImageProcView;
 
 class CDigitalImageProcDoc : public CDocument
@@ -20,7 +22,8 @@ protected: // 仅从序列化创建
 public:
 	CDigitalImageProcView* pView;
 	CGrayImgData<unsigned char>* pSrcImgData;
-	CGrayImgData<unsigned char>* pResImgData;
+	CImage* pResImg;
+	CImage* pSrcImg;
 // 特性
 public:
 
@@ -63,4 +66,5 @@ public:
 	afx_msg void OnClickRotation();
 	void RotateImg(double X, double Y, double theta);
 	afx_msg void OnSaveResImg();
+	afx_msg void OnGrayMapping();
 };

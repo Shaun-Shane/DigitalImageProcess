@@ -51,10 +51,14 @@ public:
 	}
 
 	void SaveToCImage(CImage*& pImg) {
-		delete pImg;
+		if (pImg != NULL) delete pImg;
 		pImg = new CImage();
-		pImg->Create(nWidth, -nHeight, 8);
-		
+		if (!pImg->Create(nWidth, -nHeight, 8)) {
+			AfxMessageBox(_T("¥¥Ω®CImage ß∞‹!"));
+			delete pImg;
+			pImg = NULL;
+			return;
+		}
 		RGBQUAD* pLUT = new RGBQUAD[256];
 		for (int i = 0; i < 256; i++) {
 			(pLUT + i)->rgbRed = (pLUT + i)->rgbGreen = (pLUT + i)->rgbBlue = i;

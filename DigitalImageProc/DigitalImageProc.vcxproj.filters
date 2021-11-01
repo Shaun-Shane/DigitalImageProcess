@@ -60,6 +60,9 @@
     <ClInclude Include="CGrayMapping.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CMappingDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DigitalImageProc.cpp">
@@ -96,6 +99,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CGrayMapping.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CMappingDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

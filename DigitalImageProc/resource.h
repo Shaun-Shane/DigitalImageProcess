@@ -12,7 +12,9 @@
 #define IDD_RotateDlg                   312
 #define IDD_DIALOG1                     314
 #define IDD_ZoomDlg                     314
+#define IDD_MappingDlg                  316
 #define IDC_EDIT1                       1000
+#define IDC_EDIT2                       1001
 #define IDC_EDIT3                       1003
 #define IDC_EDIT4                       1004
 #define IDC_BUTTON1                     1005
@@ -35,13 +37,17 @@
 #define ID_Rotation                     32786
 #define ID_Zomm                         32787
 #define ID_Zoom                         32788
+#define ID_32789                        32789
+#define ID_32790                        32790
+#define ID_32791                        32791
+#define ID_32792                        32792
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        316
-#define _APS_NEXT_COMMAND_VALUE         32789
+#define _APS_NEXT_RESOURCE_VALUE        318
+#define _APS_NEXT_COMMAND_VALUE         32793
 #define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

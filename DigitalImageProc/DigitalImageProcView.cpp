@@ -115,7 +115,7 @@ void CDigitalImageProcView::OnSrcWnd()
 {
 	// TODO: 在此添加命令处理程序代码
 	if (pSrcWnd == NULL) {
-		pSrcWnd = new CImgWnd(this, CRect(0, 0, 700, 600), _T("Source Image"), pDoc->pSrcImgData);
+		pSrcWnd = new CImgWnd(this, CRect(0, 0, 700, 600), _T("Source Image"));
 	}
 	else {
 		delete pSrcWnd;
@@ -135,7 +135,7 @@ void CDigitalImageProcView::OnResWnd()
 {
 	// TODO: 在此添加命令处理程序代码
 	if (pResWnd == NULL) {
-		pResWnd = new CImgWnd(this, CRect(720, 0, 1420, 600), _T("Result Image"), pDoc->pResImgData);
+		pResWnd = new CImgWnd(this, CRect(720, 0, 1420, 600), _T("Result Image"));
 	}
 	else { 
 		delete pResWnd;

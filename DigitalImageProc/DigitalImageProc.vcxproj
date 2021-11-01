@@ -113,11 +113,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10737418240</StackReserveSize>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -187,6 +188,7 @@
     <ClInclude Include="CGrayImgData.h" />
     <ClInclude Include="CGrayMapping.h" />
     <ClInclude Include="CImgWnd.h" />
+    <ClInclude Include="CMappingDlg.h" />
     <ClInclude Include="CRotateDlg.h" />
     <ClInclude Include="CTranslateDlg.h" />
     <ClInclude Include="CZoomDlg.h" />
@@ -204,6 +206,7 @@
     <ClCompile Include="CGrayImgData.cpp" />
     <ClCompile Include="CGrayMapping.cpp" />
     <ClCompile Include="CImgWnd.cpp" />
+    <ClCompile Include="CMappingDlg.cpp" />
     <ClCompile Include="CRotateDlg.cpp" />
     <ClCompile Include="CTranslateDlg.cpp" />
     <ClCompile Include="CZoomDlg.cpp" />

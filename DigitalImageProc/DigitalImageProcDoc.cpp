@@ -28,12 +28,13 @@ BEGIN_MESSAGE_MAP(CDigitalImageProcDoc, CDocument)
 	ON_COMMAND(ID_Zoom, &CDigitalImageProcDoc::OnClickZoom)
 	ON_COMMAND(ID_Rotation, &CDigitalImageProcDoc::OnClickRotation)
 	ON_COMMAND(ID_SaveResImg, &CDigitalImageProcDoc::OnSaveResImg)
+	ON_COMMAND(ID_32792, &CDigitalImageProcDoc::OnGrayMapping)
 END_MESSAGE_MAP()
 
 
 // CDigitalImageProcDoc 构造/析构
 
-CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL), pResImgData(NULL)
+CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL), pResImg(NULL), pSrcImg(NULL)
 {
 	// TODO: 在此添加一次性构造代码
 
@@ -42,7 +43,8 @@ CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData
 CDigitalImageProcDoc::~CDigitalImageProcDoc()
 {
 	delete pSrcImgData;
-	delete pResImgData;
+	delete pResImg;
+	delete pSrcImg;
 }
 
 BOOL CDigitalImageProcDoc::OnNewDocument()
@@ -146,7 +148,7 @@ void CDigitalImageProcDoc::OnOpenImg()
 {
 	// TODO: 在此添加命令处理程序代码
 	// LPCTSTR szFilter = _T("JPEG(*.jpg)|*.jpg|PNG(*.png)|*.png|BMP(*.bmp)|*.bmp||");
-	LPCTSTR szFilter = _T("BMP(*.bmp)|*.bmp||");
+	LPCTSTR szFilter = _T("||");
 	CFileDialog dlgBKFile(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter, NULL);
 
 	CString strBKFileName;
@@ -155,26 +157,26 @@ void CDigitalImageProcDoc::OnOpenImg()
 		strBKFileName = dlgBKFile.GetPathName();
 	else
 		return;
-	
-	CImage* pImg = new CImage();
-	pImg->Load(strBKFileName);
+	//delete pSrcImg;
+	if (pSrcImg == NULL) pSrcImg = new CImage();
+	else delete pSrcImg;
 
-	if (pImg->IsNull()) {
+	pSrcImg = new CImage();
+	pSrcImg->Load(strBKFileName);
+
+	if (pSrcImg->IsNull()) {
 		AfxMessageBox(_T("建立图像指针失败!"));
-		delete pImg;
+		delete pSrcImg;
+		pSrcImg = NULL;
 		return;
 	}
 	if (pSrcImgData == NULL) pSrcImgData = new CGrayImgData<unsigned char>;
 	// 更新数据
-	pSrcImgData->LoadFromCImage(pImg);
-	delete pImg;
+	pSrcImgData->LoadFromCImage(pSrcImg);
 	// 打开图像同时开启窗口显示图像
 	if (pView->pSrcWnd == NULL)
 		pView->OnSrcWnd();
-	else if (pView->pSrcWnd->pImgData == NULL)
-		pView->pSrcWnd->pImgData = pSrcImgData;
-	// 重绘
-	pView->pSrcWnd->RedrawWindow();
+	pView->pSrcWnd->SetPImg(pSrcImg);
 }
 
 void CDigitalImageProcDoc::OnClickTranslation()
@@ -194,15 +196,12 @@ void CDigitalImageProcDoc::TranslateImg(double y, double x)
 {
 	// TODO: 在此处添加实现代码.
 	CGeometricTrans<unsigned char> tmp(*pSrcImgData);
-	if (pResImgData == NULL) pResImgData = new CGrayImgData<unsigned char>;
 	// 更新数据
-	*pResImgData = tmp.Translate(y, x);
+	tmp.Translate(y, x);
+	tmp.SaveToCImage(pResImg);
 	if (pView->pResWnd == NULL) 
 		pView->OnResWnd();
-	else if (pView->pResWnd->pImgData == NULL)
-		pView->pResWnd->pImgData = pResImgData;
-	// 重绘
-	pView->pResWnd->RedrawWindow();
+	pView->pResWnd->SetPImg(pResImg);
 }
 
 
@@ -228,15 +227,12 @@ void CDigitalImageProcDoc::ZoomImg(double ratio)
 {
 	// TODO: 在此处添加实现代码.
 	CGeometricTrans<unsigned char> tmp(*pSrcImgData);
-	if (pResImgData == NULL) pResImgData = new CGrayImgData<unsigned char>;
 	// 更新数据
-	*pResImgData = tmp.Zoom(ratio);
+	tmp.Zoom(ratio);
+	tmp.SaveToCImage(pResImg);
 	if (pView->pResWnd == NULL)
 		pView->OnResWnd();
-	else if (pView->pResWnd->pImgData == NULL)
-		pView->pResWnd->pImgData = pResImgData;
-	// 重绘
-	pView->pResWnd->RedrawWindow();
+	pView->pResWnd->SetPImg(pResImg);
 }
 
 
@@ -258,22 +254,19 @@ void CDigitalImageProcDoc::RotateImg(double X, double Y, double theta)
 {
 	// TODO: 在此处添加实现代码.
 	CGeometricTrans<unsigned char> tmp(*pSrcImgData);
-	if (pResImgData == NULL) pResImgData = new CGrayImgData<unsigned char>;
 	// 更新数据
-	*pResImgData = tmp.Rotate(X, Y, theta);
+	tmp.Rotate(X, Y, theta);
+	tmp.SaveToCImage(pResImg);
 	if (pView->pResWnd == NULL)
 		pView->OnResWnd();
-	else if (pView->pResWnd->pImgData == NULL)
-		pView->pResWnd->pImgData = pResImgData;
-	// 重绘
-	pView->pResWnd->RedrawWindow();
+	pView->pResWnd->SetPImg(pResImg);
 }
 
 
 void CDigitalImageProcDoc::OnSaveResImg()
 {
 	// TODO: 在此添加命令处理程序代码
-	if (pResImgData == NULL) {
+	if (pResImg == NULL) {
 		AfxMessageBox(_T("无结果图像数据!"));
 		return;
 	}
@@ -286,9 +279,25 @@ void CDigitalImageProcDoc::OnSaveResImg()
 		strBKFileName = dlgBKFile.GetPathName();
 	else
 		return;
-	
-	CImage* pImg = NULL;
-	pResImgData->SaveToCImage(pImg);
-	pImg->Save(strBKFileName, Gdiplus::ImageFormatBMP);
-	delete pImg;
+	pResImg->Save(strBKFileName, Gdiplus::ImageFormatBMP);
+}
+
+
+void CDigitalImageProcDoc::OnGrayMapping()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMappingDlg mappingDlg;
+	if (mappingDlg.DoModal() == IDOK) {
+		if (mappingDlg.wndLen == 0) {
+			AfxMessageBox(_T("窗宽不能为0!"));
+			return;
+		}
+		CGrayMapping<unsigned short, unsigned char> myGrayMapping;
+		myGrayMapping.ReadData(mappingDlg.fileName);
+		myGrayMapping.GrayMapping(mappingDlg.wndPos, mappingDlg.wndLen);
+		myGrayMapping.SaveToCImage(pResImg);
+		if (pView->pResWnd == NULL)
+			pView->OnResWnd();
+		pView->pResWnd->SetPImg(pResImg);
+	}
 }
