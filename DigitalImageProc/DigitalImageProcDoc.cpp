@@ -23,7 +23,7 @@
 IMPLEMENT_DYNCREATE(CDigitalImageProcDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CDigitalImageProcDoc, CDocument)
-	ON_COMMAND(ID_OpenImg, &CDigitalImageProcDoc::OnOpenImg)
+	ON_COMMAND(ID_OpenImg, &CDigitalImageProcDoc::OnOpenGrayImg)
 	ON_COMMAND(ID_Translation, &CDigitalImageProcDoc::OnClickTranslation)
 	ON_COMMAND(ID_Zoom, &CDigitalImageProcDoc::OnClickZoom)
 	ON_COMMAND(ID_Rotation, &CDigitalImageProcDoc::OnClickRotation)
@@ -144,7 +144,7 @@ void CDigitalImageProcDoc::Dump(CDumpContext& dc) const
 
 // CDigitalImageProcDoc 命令
 
-void CDigitalImageProcDoc::OnOpenImg()
+void CDigitalImageProcDoc::OnOpenGrayImg()
 {
 	// TODO: 在此添加命令处理程序代码
 	// LPCTSTR szFilter = _T("JPEG(*.jpg)|*.jpg|PNG(*.png)|*.png|BMP(*.bmp)|*.bmp||");
@@ -157,26 +157,23 @@ void CDigitalImageProcDoc::OnOpenImg()
 		strBKFileName = dlgBKFile.GetPathName();
 	else
 		return;
-	//delete pSrcImg;
+
 	if (pSrcImg == NULL) pSrcImg = new CImage();
-	else delete pSrcImg;
-
-	pSrcImg = new CImage();
+	pSrcImg->Destroy();
 	pSrcImg->Load(strBKFileName);
-
 	if (pSrcImg->IsNull()) {
 		AfxMessageBox(_T("建立图像指针失败!"));
 		delete pSrcImg;
 		pSrcImg = NULL;
 		return;
 	}
+
 	if (pSrcImgData == NULL) pSrcImgData = new CGrayImgData<unsigned char>;
 	// 更新数据
 	pSrcImgData->LoadFromCImage(pSrcImg);
 	// 打开图像同时开启窗口显示图像
-	if (pView->pSrcWnd == NULL)
-		pView->OnSrcWnd();
-	pView->pSrcWnd->SetPImg(pSrcImg);
+	if (pView->pSrcWnd == NULL) pView->OnSrcWnd();
+	UpdateAllViews(NULL);
 }
 
 void CDigitalImageProcDoc::OnClickTranslation()
@@ -199,9 +196,8 @@ void CDigitalImageProcDoc::TranslateImg(double y, double x)
 	// 更新数据
 	tmp.Translate(y, x);
 	tmp.SaveToCImage(pResImg);
-	if (pView->pResWnd == NULL) 
-		pView->OnResWnd();
-	pView->pResWnd->SetPImg(pResImg);
+	if (pView->pResWnd == NULL) pView->OnResWnd();
+	UpdateAllViews(NULL);
 }
 
 
@@ -230,9 +226,8 @@ void CDigitalImageProcDoc::ZoomImg(double ratio)
 	// 更新数据
 	tmp.Zoom(ratio);
 	tmp.SaveToCImage(pResImg);
-	if (pView->pResWnd == NULL)
-		pView->OnResWnd();
-	pView->pResWnd->SetPImg(pResImg);
+	if (pView->pResWnd == NULL) pView->OnResWnd();
+	UpdateAllViews(NULL);
 }
 
 
@@ -257,9 +252,8 @@ void CDigitalImageProcDoc::RotateImg(double X, double Y, double theta)
 	// 更新数据
 	tmp.Rotate(X, Y, theta);
 	tmp.SaveToCImage(pResImg);
-	if (pView->pResWnd == NULL)
-		pView->OnResWnd();
-	pView->pResWnd->SetPImg(pResImg);
+	if (pView->pResWnd == NULL) pView->OnResWnd();
+	UpdateAllViews(NULL);
 }
 
 
@@ -292,12 +286,18 @@ void CDigitalImageProcDoc::OnGrayMapping()
 			AfxMessageBox(_T("窗宽不能为0!"));
 			return;
 		}
-		CGrayMapping<unsigned short, unsigned char> myGrayMapping;
-		myGrayMapping.ReadData(mappingDlg.fileName);
-		myGrayMapping.GrayMapping(mappingDlg.wndPos, mappingDlg.wndLen);
-		myGrayMapping.SaveToCImage(pResImg);
-		if (pView->pResWnd == NULL)
-			pView->OnResWnd();
-		pView->pResWnd->SetPImg(pResImg);
+		GrayMapping(mappingDlg.fileName, mappingDlg.wndPos, mappingDlg.wndLen);
 	}
+}
+
+
+void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
+{
+	// TODO: 在此处添加实现代码.
+	CGrayMapping<unsigned short, unsigned char> myGrayMapping;
+	myGrayMapping.ReadData(fileName);
+	myGrayMapping.GrayMapping(wndPos, wndLen);
+	myGrayMapping.SaveToCImage(pResImg);
+	if (pView->pResWnd == NULL) pView->OnResWnd();
+	UpdateAllViews(NULL);
 }

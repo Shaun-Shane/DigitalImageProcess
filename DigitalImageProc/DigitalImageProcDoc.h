@@ -58,7 +58,7 @@ protected:
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
 public:
-	afx_msg void OnOpenImg();
+	afx_msg void OnOpenGrayImg();
 	afx_msg void OnClickTranslation();
 	void TranslateImg(double y, double x);
 	afx_msg void OnClickZoom();
@@ -67,4 +67,5 @@ public:
 	void RotateImg(double X, double Y, double theta);
 	afx_msg void OnSaveResImg();
 	afx_msg void OnGrayMapping();
+	void GrayMapping(CString fileName, int wndPos, int wndLen);
 };

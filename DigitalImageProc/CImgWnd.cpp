@@ -22,6 +22,7 @@ CImgWnd::~CImgWnd()
 }
 
 void CImgWnd::SetPImg(CImage* _pImg) { 
+	if (_pImg == NULL) return;
 	pImg = _pImg; 
 	SCROLLINFO info;
 	GetScrollInfo(SB_HORZ, &info, SIF_ALL);
@@ -92,7 +93,6 @@ void CImgWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	int minpos;
 	int maxpos;
 	GetScrollRange(SB_HORZ, &minpos, &maxpos);
-	maxpos = GetScrollLimit(SB_HORZ);
 
 	// Get the current position of scroll box.
 	int curpos = GetScrollPos(SB_HORZ);
@@ -170,7 +170,6 @@ void CImgWnd::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	int minpos;
 	int maxpos;
 	GetScrollRange(SB_VERT, &minpos, &maxpos);
-	maxpos = GetScrollLimit(SB_VERT);
 
 	// Get the current position of scroll box.
 	int curpos = GetScrollPos(SB_VERT);
@@ -256,13 +255,14 @@ void CImgWnd::OnSize(UINT nType, int cx, int cy)
 	si.nMax = (pImg == NULL ? 1024 : pImg->GetHeight());
 	si.nPage = cy;
 	SetScrollInfo(SB_VERT, &si, TRUE);
-
+	
 	int curH = GetScrollPos(SB_HORZ);
 	int curV = GetScrollPos(SB_VERT);
 	if (curH < scrollH) ScrollWindow(scrollH - curH, 0);
 	if (curV < scrollV) ScrollWindow(0, scrollV - curV);
 	scrollH = GetScrollPos(SB_HORZ);
 	scrollV = GetScrollPos(SB_VERT);
+
 	UpdateWindow();
 }
 

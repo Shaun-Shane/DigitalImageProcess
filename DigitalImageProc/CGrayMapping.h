@@ -40,14 +40,13 @@ public:
 
     void GrayMapping(int wndPos, int wndLen) {
         int wndL = wndPos - wndLen / 2, wndR = wndPos + wndLen / 2;
-        for (int i = 0; i < nHeight; i++)
-            for (int j = 0; j < nWidth; j++) {
-                if (pSPixels[i * nWidth + j] < wndL)
-                    pPixels[i * nWidth + j] = 0;
-                else if (pSPixels[i * nWidth + j] >= wndR)
-                    pPixels[i * nWidth + j] = 255;
+        for (int i = 0 ; i < nHeight * nWidth; i++) {
+                if (pSPixels[i] < wndL)
+                    pPixels[i] = 0;
+                else if (pSPixels[i] >= wndR)
+                    pPixels[i] = 255;
                 else 
-                    pPixels[i * nWidth + j] = static_cast<T>(1.0 * (pSPixels[i * nWidth + j] - wndL) / wndLen * 255);
+                    pPixels[i] = static_cast<T>(1.0 * (pSPixels[i] - wndL) / wndLen * 255);
             }
     }
 
