@@ -162,4 +162,5 @@ void CDigitalImageProcView::OnInitialUpdate()
 void CDigitalImageProcView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
 {
 	// TODO: 在此添加专用代码和/或调用基类
+	// AfxMessageBox(_T("update"));
 }
