@@ -37,6 +37,13 @@ public:
 		return pPixels[i * nWidth + j];
 	}
 
+	void Create(int Height, int Width, T* data) {
+		delete[] pPixels;
+		nHeight = Height, nWidth = Width;
+		pPixels = new T[nHeight * nWidth];
+		for (int i = 0; i < nHeight * nWidth; i++) pPixels[i] = data[i];
+	}
+
 	void LoadFromCImage(CImage* pImg) {
 		nWidth = pImg->GetWidth(), nHeight = pImg->GetHeight();
 		delete[] pPixels;

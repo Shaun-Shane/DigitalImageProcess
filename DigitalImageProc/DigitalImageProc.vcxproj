@@ -187,6 +187,7 @@
     <ClInclude Include="CGeometricTrans.h" />
     <ClInclude Include="CGrayImgData.h" />
     <ClInclude Include="CGrayMapping.h" />
+    <ClInclude Include="CImgEnhance.h" />
     <ClInclude Include="CImgWnd.h" />
     <ClInclude Include="CMappingDlg.h" />
     <ClInclude Include="CRotateDlg.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="CGeometricTrans.cpp" />
     <ClCompile Include="CGrayImgData.cpp" />
     <ClCompile Include="CGrayMapping.cpp" />
+    <ClCompile Include="CImgEnhance.cpp" />
     <ClCompile Include="CImgWnd.cpp" />
     <ClCompile Include="CMappingDlg.cpp" />
     <ClCompile Include="CRotateDlg.cpp" />

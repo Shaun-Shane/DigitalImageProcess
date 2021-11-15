@@ -28,4 +28,6 @@ public:
 	int wndLen;
 	afx_msg void OnBnClickedUpload();
 	virtual void OnOK();
+	afx_msg void OnDestroy();
+	virtual void OnCancel();
 };

@@ -69,4 +69,5 @@ public:
 	afx_msg void OnSaveResImg();
 	afx_msg void OnGrayMapping();
 	void GrayMapping(CString fileName, int wndPos, int wndLen);
+	void ReadCustomData(CString fileName);
 };

@@ -281,24 +281,46 @@ void CDigitalImageProcDoc::OnSaveResImg()
 void CDigitalImageProcDoc::OnGrayMapping()
 {
 	// TODO: 在此添加命令处理程序代码
-	CMappingDlg mappingDlg;
-	if (mappingDlg.DoModal() == IDOK) {
-		if (mappingDlg.wndLen == 0) {
-			AfxMessageBox(_T("窗宽不能为0!"));
-			return;
-		}
-		GrayMapping(mappingDlg.fileName, mappingDlg.wndPos, mappingDlg.wndLen);
-	}
+	CMappingDlg* mappingDlg = new CMappingDlg;
+	mappingDlg->Create(IDD_MappingDlg, pView);
+	mappingDlg->pDoc = this;
+	mappingDlg->ShowWindow(SW_SHOW);
 }
 
 
 void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
 {
 	// TODO: 在此处添加实现代码.
-	CGrayMapping<unsigned short> myGrayMapping;
-	myGrayMapping.ReadData(fileName);
+	ReadCustomData(fileName);
+	CGrayMapping<unsigned short> myGrayMapping(*pCustomData);
 	myGrayMapping.GrayMapping(wndPos, wndLen);
 	myGrayMapping.SaveToCImage(pResImg);
 	if (pView->pResWnd == NULL) pView->OnResWnd();
 	UpdateAllViews(NULL);
+}
+
+
+void CDigitalImageProcDoc::ReadCustomData(CString fileName)
+{
+	// TODO: 在此处添加实现代码.
+	pCustomData = new CGrayImgData<unsigned short>;
+	std::string s = (CStringA)fileName;
+	const char* p = s.c_str();
+
+	FILE* fp = fopen(p, "rb");
+	if (!fp) {
+		AfxMessageBox(_T("打开图像失败!"));
+		return;
+	}
+
+	unsigned long w = 0, h = 0;
+	fread(&w, 4, 1, fp);
+	fread(&h, 4, 1, fp);
+	unsigned short* tmp = new unsigned short[w * h];
+	fread(tmp, 2, w * h, fp);
+	
+	fclose(fp);
+
+	pCustomData->Create(h, w, tmp);
+	delete[] tmp;
 }
