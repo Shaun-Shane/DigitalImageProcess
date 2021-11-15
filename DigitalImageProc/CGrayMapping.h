@@ -9,10 +9,10 @@ class CGrayMapping :
 public:
     CGrayMapping(CGrayImgData<T>& other) : CGrayImgData(other) {}
 
-    CGrayMapping() : CGrayImgData(), pSPixels(NULL){}
+    CGrayMapping() : CGrayImgData(), pSrcPixels(NULL){}
     
     virtual ~CGrayMapping() {
-        delete[] pSPixels;
+        delete[] pSrcPixels;
     }
 
     void ReadData(CString strBKFileName) {
@@ -31,9 +31,9 @@ public:
         
         nHeight = h, nWidth = w;
         
-        pSPixels = new S[nHeight * nWidth] { 0 };
+        pSrcPixels = new S[nHeight * nWidth] { 0 };
         pPixels = new T[nHeight * nWidth]{ 0 };
-        fread(pSPixels, 2, nHeight * nWidth, fp);                    
+        fread(pSrcPixels, 2, nHeight * nWidth, fp);                    
         
         fclose(fp);
     }
@@ -41,16 +41,16 @@ public:
     void GrayMapping(int wndPos, int wndLen) {
         int wndL = wndPos - wndLen / 2, wndR = wndPos + wndLen / 2;
         for (int i = 0 ; i < nHeight * nWidth; i++) {
-                if (pSPixels[i] < wndL)
+                if (pSrcPixels[i] < wndL)
                     pPixels[i] = 0;
-                else if (pSPixels[i] >= wndR)
+                else if (pSrcPixels[i] >= wndR)
                     pPixels[i] = 255;
                 else 
-                    pPixels[i] = static_cast<T>(1.0 * (pSPixels[i] - wndL) / wndLen * 255);
+                    pPixels[i] = static_cast<T>(1.0 * (pSrcPixels[i] - wndL) / wndLen * 255);
             }
     }
 
 protected:
-    S* pSPixels;
+    S* pSrcPixels;
 };
 
