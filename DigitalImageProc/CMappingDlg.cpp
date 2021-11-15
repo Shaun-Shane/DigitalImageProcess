@@ -16,6 +16,7 @@ CMappingDlg::CMappingDlg(CWnd* pParent /*=nullptr*/)
 	, fileName(_T(""))
 	, wndPos(0)
 	, wndLen(0)
+	, pDoc(NULL)
 {
 
 }
@@ -55,4 +56,11 @@ void CMappingDlg::OnBnClickedUpload()
 		return;
 	fileName = strBKFileName;
 	this->SetDlgItemTextW(IDC_EDIT2, fileName);
+}
+
+
+void CMappingDlg::OnOK()
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	CDialog::OnOK();
 }

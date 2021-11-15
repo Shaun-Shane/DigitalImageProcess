@@ -22,6 +22,7 @@ protected: // 仅从序列化创建
 public:
 	CDigitalImageProcView* pView;
 	CGrayImgData<unsigned char>* pSrcImgData;
+	CGrayImgData<unsigned short>* pCustomData;
 	CImage* pResImg;
 	CImage* pSrcImg;
 // 特性

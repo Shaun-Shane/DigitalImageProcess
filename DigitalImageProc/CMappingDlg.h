@@ -2,6 +2,7 @@
 
 
 // CMappingDlg 对话框
+#include "DigitalImageProcDoc.h"
 
 class CMappingDlg : public CDialog
 {
@@ -22,7 +23,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CString fileName;
+	CDigitalImageProcDoc* pDoc;
 	int wndPos;
 	int wndLen;
 	afx_msg void OnBnClickedUpload();
+	virtual void OnOK();
 };

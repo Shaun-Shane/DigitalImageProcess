@@ -2,18 +2,16 @@
 #include "CGrayImgData.h"
 #include <string>
 
-template<class S, class T>
+template<class T>
 class CGrayMapping :
     public CGrayImgData<T>
 {
 public:
     CGrayMapping(CGrayImgData<T>& other) : CGrayImgData(other) {}
 
-    CGrayMapping() : CGrayImgData(), pSrcPixels(NULL){}
+    CGrayMapping() : CGrayImgData(){}
     
-    virtual ~CGrayMapping() {
-        delete[] pSrcPixels;
-    }
+    virtual ~CGrayMapping() {}
 
     void ReadData(CString strBKFileName) {
         std::string s = (CStringA)strBKFileName;
@@ -31,9 +29,8 @@ public:
         
         nHeight = h, nWidth = w;
         
-        pSrcPixels = new S[nHeight * nWidth] { 0 };
         pPixels = new T[nHeight * nWidth]{ 0 };
-        fread(pSrcPixels, 2, nHeight * nWidth, fp);                    
+        fread(pPixels, 2, nHeight * nWidth, fp);                    
         
         fclose(fp);
     }
@@ -41,16 +38,13 @@ public:
     void GrayMapping(int wndPos, int wndLen) {
         int wndL = wndPos - wndLen / 2, wndR = wndPos + wndLen / 2;
         for (int i = 0 ; i < nHeight * nWidth; i++) {
-                if (pSrcPixels[i] < wndL)
+                if (pPixels[i] < wndL)
                     pPixels[i] = 0;
-                else if (pSrcPixels[i] >= wndR)
+                else if (pPixels[i] >= wndR)
                     pPixels[i] = 255;
                 else 
-                    pPixels[i] = static_cast<T>(1.0 * (pSrcPixels[i] - wndL) / wndLen * 255);
+                    pPixels[i] = static_cast<T>(1.0 * (pPixels[i] - wndL) / wndLen * 255);
             }
     }
-
-protected:
-    S* pSrcPixels;
 };
 

@@ -34,7 +34,7 @@ END_MESSAGE_MAP()
 
 // CDigitalImageProcDoc 构造/析构
 
-CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL), pResImg(NULL), pSrcImg(NULL)
+CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL), pResImg(NULL), pSrcImg(NULL), pCustomData(NULL)
 {
 	// TODO: 在此添加一次性构造代码
 
@@ -43,6 +43,7 @@ CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData
 CDigitalImageProcDoc::~CDigitalImageProcDoc()
 {
 	delete pSrcImgData;
+	delete pCustomData;
 	delete pResImg;
 	delete pSrcImg;
 }
@@ -294,7 +295,7 @@ void CDigitalImageProcDoc::OnGrayMapping()
 void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
 {
 	// TODO: 在此处添加实现代码.
-	CGrayMapping<unsigned short, unsigned char> myGrayMapping;
+	CGrayMapping<unsigned short> myGrayMapping;
 	myGrayMapping.ReadData(fileName);
 	myGrayMapping.GrayMapping(wndPos, wndLen);
 	myGrayMapping.SaveToCImage(pResImg);
