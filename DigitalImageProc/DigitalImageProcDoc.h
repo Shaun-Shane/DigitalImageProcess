@@ -12,6 +12,7 @@
 #include "CRotateDlg.h"
 #include "CGrayMapping.h"
 #include "CMappingDlg.h"
+#include "CImgEnhance.h"
 class CDigitalImageProcView;
 
 class CDigitalImageProcDoc : public CDocument
