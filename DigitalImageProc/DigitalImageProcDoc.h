@@ -24,6 +24,8 @@ public:
 	CDigitalImageProcView* pView;
 	CGrayImgData<unsigned char>* pSrcImgData;
 	CGrayImgData<unsigned short>* pCustomData;
+	CGrayImgData<unsigned char>* pEnhancedSrcImgData;
+	CGrayImgData<unsigned short>* pEnhancedCustomData;
 	CImage* pResImg;
 	CImage* pSrcImg;
 // 特性

@@ -281,6 +281,9 @@ void CDigitalImageProcDoc::OnSaveResImg()
 void CDigitalImageProcDoc::OnGrayMapping()
 {
 	// TODO: 在此添加命令处理程序代码
+
+
+
 	CMappingDlg* mappingDlg = new CMappingDlg;
 	mappingDlg->Create(IDD_MappingDlg, pView);
 	mappingDlg->pDoc = this;
@@ -294,8 +297,8 @@ void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
 	ReadCustomData(fileName);
 	CGrayMapping<unsigned short> myGrayMapping(*pCustomData);
 	myGrayMapping.GrayMapping(wndPos, wndLen);
-	myGrayMapping.SaveToCImage(pResImg);
-	if (pView->pResWnd == NULL) pView->OnResWnd();
+	myGrayMapping.SaveToCImage(pSrcImg);
+	if (pView->pSrcWnd == NULL) pView->OnResWnd();
 	UpdateAllViews(NULL);
 }
 
