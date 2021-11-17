@@ -31,11 +31,13 @@ BEGIN_MESSAGE_MAP(CDigitalImageProcView, CView)
 	ON_UPDATE_COMMAND_UI(ID_SrcWind, &CDigitalImageProcView::OnUpdateSrcWnd)
 	ON_COMMAND(ID_ResWind, &CDigitalImageProcView::OnResWnd)
 	ON_UPDATE_COMMAND_UI(ID_ResWind, &CDigitalImageProcView::OnUpdateResWnd)
+	ON_COMMAND(ID_EnhancedImgWnd, &CDigitalImageProcView::OnEnhancedimgwnd)
+	ON_UPDATE_COMMAND_UI(ID_EnhancedImgWnd, &CDigitalImageProcView::OnUpdateEnhancedimgwnd)
 END_MESSAGE_MAP()
 
 // CDigitalImageProcView 构造/析构
 
-CDigitalImageProcView::CDigitalImageProcView() noexcept : pSrcWnd(NULL), pResWnd(NULL), pDoc(NULL)
+CDigitalImageProcView::CDigitalImageProcView() noexcept : pSrcWnd(NULL), pResWnd(NULL), pDoc(NULL), pEnhanceWnd(NULL)
 {
 	// TODO: 在此处添加构造代码
 
@@ -45,6 +47,7 @@ CDigitalImageProcView::~CDigitalImageProcView()
 {
 	delete pSrcWnd;
 	delete pResWnd;
+	delete pEnhanceWnd;
 }
 
 BOOL CDigitalImageProcView::PreCreateWindow(CREATESTRUCT& cs)
@@ -167,4 +170,26 @@ void CDigitalImageProcView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObje
 	// AfxMessageBox(_T("update"));
 	if (pSrcWnd != NULL) pSrcWnd->SetPImg(pDoc->pSrcImg);
 	if (pResWnd != NULL) pResWnd->SetPImg(pDoc->pResImg);
+	if (pEnhanceWnd != NULL) pEnhanceWnd->SetPImg(pDoc->pEnhancedImg);
+}
+
+
+void CDigitalImageProcView::OnEnhancedimgwnd()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (pEnhanceWnd == NULL) {
+		pEnhanceWnd = new CImgWnd(this, CRect(720, 100, 1420, 700), _T("Enhanced Image"));
+		pEnhanceWnd->SetPImg(pDoc->pEnhancedImg);
+	}
+	else {
+		delete pEnhanceWnd;
+		pEnhanceWnd = NULL;
+	}
+}
+
+
+void CDigitalImageProcView::OnUpdateEnhancedimgwnd(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(pEnhanceWnd != NULL);
 }

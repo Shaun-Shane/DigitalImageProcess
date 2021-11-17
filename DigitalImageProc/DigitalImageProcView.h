@@ -17,6 +17,7 @@ protected: // 仅从序列化创建
 public:
 	CImgWnd* pSrcWnd;
 	CImgWnd* pResWnd;
+	CImgWnd* pEnhanceWnd;
 	CDigitalImageProcDoc* pDoc;
 // 特性
 public:
@@ -54,6 +55,8 @@ public:
 	afx_msg void OnUpdateResWnd(CCmdUI* pCmdUI);
 	virtual void OnInitialUpdate();
 	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
+	afx_msg void OnEnhancedimgwnd();
+	afx_msg void OnUpdateEnhancedimgwnd(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // DigitalImageProcView.cpp 中的调试版本
