@@ -40,6 +40,7 @@ END_MESSAGE_MAP()
 
 CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL)
 , pResImg(NULL), pSrcImg(NULL), pCustomData(NULL), denoisingTag(0), sharpeningTag(0)
+, pEnhancedImg(NULL)
 {
 	// TODO: 在此添加一次性构造代码
 
@@ -51,6 +52,7 @@ CDigitalImageProcDoc::~CDigitalImageProcDoc()
 	delete pCustomData;
 	delete pResImg;
 	delete pSrcImg;
+	delete pEnhancedImg;
 }
 
 BOOL CDigitalImageProcDoc::OnNewDocument()

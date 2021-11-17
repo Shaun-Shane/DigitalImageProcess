@@ -24,10 +24,9 @@ public:
 	CDigitalImageProcView* pView;
 	CGrayImgData<unsigned char>* pSrcImgData;
 	CGrayImgData<unsigned short>* pCustomData;
-	CGrayImgData<unsigned char>* pEnhancedSrcImgData;
-	CGrayImgData<unsigned short>* pEnhancedCustomData;
 	CImage* pResImg;
 	CImage* pSrcImg;
+	CImage* pEnhancedImg;
 	bool denoisingTag;
 	bool sharpeningTag;
 // 特性
