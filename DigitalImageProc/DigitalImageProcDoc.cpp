@@ -29,12 +29,17 @@ BEGIN_MESSAGE_MAP(CDigitalImageProcDoc, CDocument)
 	ON_COMMAND(ID_Rotation, &CDigitalImageProcDoc::OnClickRotation)
 	ON_COMMAND(ID_SaveResImg, &CDigitalImageProcDoc::OnSaveResImg)
 	ON_COMMAND(ID_32792, &CDigitalImageProcDoc::OnGrayMapping)
+	ON_COMMAND(ID_Denoising, &CDigitalImageProcDoc::OnClickDenoising)
+	ON_COMMAND(ID_Sharpening, &CDigitalImageProcDoc::OnClickSharpening)
+	ON_UPDATE_COMMAND_UI(ID_Denoising, &CDigitalImageProcDoc::OnUpdateDenoising)
+	ON_UPDATE_COMMAND_UI(ID_Sharpening, &CDigitalImageProcDoc::OnUpdateSharpening)
 END_MESSAGE_MAP()
 
 
 // CDigitalImageProcDoc 构造/析构
 
-CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL), pResImg(NULL), pSrcImg(NULL), pCustomData(NULL)
+CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL)
+, pResImg(NULL), pSrcImg(NULL), pCustomData(NULL), denoisingTag(0), sharpeningTag(0)
 {
 	// TODO: 在此添加一次性构造代码
 
@@ -298,7 +303,7 @@ void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
 	CGrayMapping<unsigned short> myGrayMapping(*pCustomData);
 	myGrayMapping.GrayMapping(wndPos, wndLen);
 	myGrayMapping.SaveToCImage(pSrcImg);
-	if (pView->pSrcWnd == NULL) pView->OnResWnd();
+	if (pView->pSrcWnd == NULL) pView->OnSrcWnd();
 	UpdateAllViews(NULL);
 }
 
@@ -326,4 +331,33 @@ void CDigitalImageProcDoc::ReadCustomData(CString fileName)
 
 	pCustomData->Create(h, w, tmp);
 	delete[] tmp;
+}
+
+
+
+void CDigitalImageProcDoc::OnClickDenoising()
+{
+	// TODO: 在此添加命令处理程序代码
+	denoisingTag ^= 1;
+}
+
+
+void CDigitalImageProcDoc::OnClickSharpening()
+{
+	// TODO: 在此添加命令处理程序代码
+	sharpeningTag ^= 1;
+}
+
+
+void CDigitalImageProcDoc::OnUpdateDenoising(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(denoisingTag);
+}
+
+
+void CDigitalImageProcDoc::OnUpdateSharpening(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(sharpeningTag);
 }

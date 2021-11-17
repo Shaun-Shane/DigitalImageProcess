@@ -28,6 +28,8 @@ public:
 	CGrayImgData<unsigned short>* pEnhancedCustomData;
 	CImage* pResImg;
 	CImage* pSrcImg;
+	bool denoisingTag;
+	bool sharpeningTag;
 // 特性
 public:
 
@@ -73,4 +75,8 @@ public:
 	afx_msg void OnGrayMapping();
 	void GrayMapping(CString fileName, int wndPos, int wndLen);
 	void ReadCustomData(CString fileName);
+	afx_msg void OnClickDenoising();
+	afx_msg void OnClickSharpening();
+	afx_msg void OnUpdateDenoising(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateSharpening(CCmdUI* pCmdUI);
 };
