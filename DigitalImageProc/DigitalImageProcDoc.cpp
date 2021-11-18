@@ -40,7 +40,7 @@ END_MESSAGE_MAP()
 
 CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL)
 , pResImg(NULL), pSrcImg(NULL), pCustomData(NULL), denoisingTag(0), sharpeningTag(0)
-, pEnhancedImg(NULL), pEnhancedSrcImgData(NULL), pEnhancedCustomData(NULL), customEnhancedTag(0)
+, pEnhancedImg(NULL), pEnhancedSrcImgData(NULL), pEnhancedCustomData(NULL)
 {
 	// TODO: 在此添加一次性构造代码
 
@@ -309,7 +309,7 @@ void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
 	myGrayMapping.SaveToCImage(pSrcImg);
 	if (pView->pSrcWnd == NULL) pView->OnSrcWnd();
 	if (denoisingTag || sharpeningTag) {
-		if (!customEnhancedTag) Enhance();
+		Enhance();
 		CGrayMapping<unsigned short> myGrayMapping(*pEnhancedCustomData);
 		myGrayMapping.GrayMapping(wndPos, wndLen);
 		myGrayMapping.SaveToCImage(pEnhancedImg);
@@ -341,7 +341,6 @@ void CDigitalImageProcDoc::ReadCustomData(CString fileName)
 
 	pCustomData->Create(h, w, tmp);
 	delete[] tmp;
-	customEnhancedTag = 0;
 }
 
 
@@ -387,6 +386,5 @@ void CDigitalImageProcDoc::Enhance()
 			customEnhance.Laplacian();
 		}
 		customEnhance.CopyTo(pEnhancedCustomData);
-		customEnhancedTag = 1;
 	}
 }

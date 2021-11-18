@@ -80,11 +80,11 @@ public:
         };
         */
         const int core[3][3] = {
-            {0, -1, 0},
-            {-1, 4, -1},
-            {0, -1, 0},
+            {0, 1, 0},
+            {1, -4, 1},
+            {0, 1, 0},
         };
-        const double a = 20.4;
+        const double a = 5.4;
 
         T* tmp = new T[nHeight * nWidth];
         for (int i = 0; i < nHeight * nWidth; i++) tmp[i] = pPixels[i];
