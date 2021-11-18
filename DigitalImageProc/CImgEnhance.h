@@ -17,23 +17,88 @@ public:
     virtual ~CImgEnhance() {}
 
     void AveragingFilter() {
-        const static int wndSize = 3;
-        const static int core[3][3] = { {1, 1, 1}, {1, 1, 1}, {1, 1, 1} };
-        const static int totWeight = 9;
-        for (int i = 0; i < nHeight - 2; i++)
-            for (int j = 0; j < nWidth - 2; j++) {
-                int tmp = 0;
-                for (int p = 0; p < 3; p++)
-                    for (int q = 0; q < 3; q++)
-                        tmp += GetPixel(i + p, j + q);
-                SetPixel(i + 1£¬ j + 1, tmp / totWeight);
+        const int coreSize = 5;
+        static int core[coreSize][coreSize] = {};
+        for (int i = 0; i < coreSize; i++)
+            for (int j = 0; j < coreSize; j++)
+                core[i][j] = 1;
+        const int totWeight = coreSize * coreSize;
+
+        T* tmp = new T[nHeight * nWidth];
+        for (int i = 0; i < nHeight * nWidth; i++) tmp[i] = pPixels[i];
+        
+        for (int i = 0; i <= nHeight - coreSize; i++)
+            for (int j = 0; j <= nWidth - coreSize; j++) {
+                int w = 0;
+                for (int p = 0; p < coreSize; p++)
+                    for (int q = 0; q < coreSize; q++)
+                        w += core[p][q] * tmp[(i + p) * nWidth + j + q];
+                pPixels[(i + coreSize / 2) * nWidth + j + coreSize / 2] = w / totWeight;
             }
+        delete[] tmp;
     }
 
     void GaussFilter() {
+        const double pi = acos(-1.0);
+        const double sigma = 0.01;
+        const int coreSize = 3;
+        double core[3][3] = {};
+        double totWeight = 0;
+        for (int i = 0; i < coreSize; i++)
+            for (int j = 0; j < coreSize; j++) {
+                core[i][j] = sqrt(2 * pi) * sigma 
+                    * exp(- 2.0 * pi * pi * sigma * sigma * ((i - coreSize / 2) * (i - coreSize / 2) + (j - coreSize / 2) * (j - coreSize / 2)));
+                totWeight += core[i][j];
+            }
+        for (int i = 0; i < coreSize; i++)
+            for (int j = 0; j < coreSize; j++)
+                core[i][j] /= totWeight;
 
+        T* tmp = new T[nHeight * nWidth];
+        for (int i = 0; i < nHeight * nWidth; i++) tmp[i] = pPixels[i];
+
+        for (int i = 0; i <= nHeight - coreSize; i++)
+            for (int j = 0; j <= nWidth - coreSize; j++) {
+                double w = 0;
+                for (int p = 0; p < coreSize; p++)
+                    for (int q = 0; q < coreSize; q++)
+                        w += core[p][q] * tmp[(i + p) * nWidth + j + q];
+                pPixels[(i + coreSize / 2) * nWidth + j + coreSize / 2] = w;
+            }
+        delete[] tmp;
     }
 
+    void Laplacian() {
+        const int coreSize = 3;
+        /*
+        const static int core[5][5] = {
+            {1, 1, 1, 1, 1},
+            {1, 1, 2, 1, 1},
+            {1, 2, 3, 2, 1},
+            {1, 1, 2, 1, 1},
+            {1, 1, 1, 1, 1}
+        };
+        */
+        const int core[3][3] = {
+            {0, -1, 0},
+            {-1, 4, -1},
+            {0, -1, 0},
+        };
+        const double a = 20.4;
 
+        T* tmp = new T[nHeight * nWidth];
+        for (int i = 0; i < nHeight * nWidth; i++) tmp[i] = pPixels[i];
+
+        for (int i = 0; i <= nHeight - coreSize; i++)
+            for (int j = 0; j <= nWidth - coreSize; j++) {
+               int w = 0;
+                for (int p = 0; p < coreSize; p++)
+                    for (int q = 0; q < coreSize; q++)
+                        w += core[p][q] * tmp[(i + p) * nWidth + j + q];
+                if (a * w <= pPixels[(i + coreSize / 2) * nWidth + j + coreSize / 2]) pPixels[(i + coreSize / 2) * nWidth + j + coreSize / 2] -= a * w;
+                else pPixels[(i + coreSize / 2) * nWidth + j + coreSize / 2] = 0;
+            }
+        delete[] tmp;
+    }
 };
 

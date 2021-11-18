@@ -31,6 +31,7 @@ public:
 	CImage* pEnhancedImg;
 	bool denoisingTag;
 	bool sharpeningTag;
+	bool customEnhancedTag;
 // 特性
 public:
 

@@ -14,8 +14,8 @@ IMPLEMENT_DYNAMIC(CMappingDlg, CDialog)
 CMappingDlg::CMappingDlg(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_MappingDlg, pParent)
 	, fileName(_T(""))
-	, wndPos(0)
-	, wndLen(0)
+	, wndPos(2048)
+	, wndLen(4096)
 	, pDoc(NULL)
 {
 

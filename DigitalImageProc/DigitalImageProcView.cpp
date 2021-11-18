@@ -178,7 +178,7 @@ void CDigitalImageProcView::OnEnhancedimgwnd()
 {
 	// TODO: 在此添加命令处理程序代码
 	if (pEnhanceWnd == NULL) {
-		pEnhanceWnd = new CImgWnd(this, CRect(720, 100, 1420, 700), _T("Enhanced Image"));
+		pEnhanceWnd = new CImgWnd(this, CRect(420, 0, 1120, 600), _T("Enhanced Image"));
 		pEnhanceWnd->SetPImg(pDoc->pEnhancedImg);
 	}
 	else {

@@ -40,7 +40,7 @@ END_MESSAGE_MAP()
 
 CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL)
 , pResImg(NULL), pSrcImg(NULL), pCustomData(NULL), denoisingTag(0), sharpeningTag(0)
-, pEnhancedImg(NULL), pEnhancedSrcImgData(NULL), pEnhancedCustomData(NULL)
+, pEnhancedImg(NULL), pEnhancedSrcImgData(NULL), pEnhancedCustomData(NULL), customEnhancedTag(0)
 {
 	// TODO: 在此添加一次性构造代码
 
@@ -308,6 +308,12 @@ void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
 	myGrayMapping.GrayMapping(wndPos, wndLen);
 	myGrayMapping.SaveToCImage(pSrcImg);
 	if (pView->pSrcWnd == NULL) pView->OnSrcWnd();
+	if (denoisingTag || sharpeningTag) {
+		if (!customEnhancedTag) Enhance();
+		CGrayMapping<unsigned short> myGrayMapping(*pEnhancedCustomData);
+		myGrayMapping.GrayMapping(wndPos, wndLen);
+		myGrayMapping.SaveToCImage(pEnhancedImg);
+	}
 	UpdateAllViews(NULL);
 }
 
@@ -335,6 +341,7 @@ void CDigitalImageProcDoc::ReadCustomData(CString fileName)
 
 	pCustomData->Create(h, w, tmp);
 	delete[] tmp;
+	customEnhancedTag = 0;
 }
 
 
@@ -343,7 +350,6 @@ void CDigitalImageProcDoc::OnClickDenoising()
 {
 	// TODO: 在此添加命令处理程序代码
 	denoisingTag ^= 1;
-	Enhance();
 }
 
 
@@ -351,7 +357,6 @@ void CDigitalImageProcDoc::OnClickSharpening()
 {
 	// TODO: 在此添加命令处理程序代码
 	sharpeningTag ^= 1;
-	Enhance();
 }
 
 
@@ -372,13 +377,16 @@ void CDigitalImageProcDoc::OnUpdateSharpening(CCmdUI* pCmdUI)
 void CDigitalImageProcDoc::Enhance()
 {
 	// TODO: 在此处添加实现代码.
-	if (sharpeningTag || denoisingTag) {
+	if (pCustomData != NULL) {
+		CImgEnhance<unsigned short> customEnhance(*pCustomData);
 		if (denoisingTag) {
-
+			// customEnhance.AveragingFilter();	
+			customEnhance.GaussFilter();
 		}
 		if (sharpeningTag) {
-
+			customEnhance.Laplacian();
 		}
-		UpdateAllViews(NULL);
+		customEnhance.CopyTo(pEnhancedCustomData);
+		customEnhancedTag = 1;
 	}
 }

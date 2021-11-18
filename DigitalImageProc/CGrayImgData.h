@@ -12,9 +12,12 @@ public:
 		for(int i = 0; i < nWidth * nHeight; i++) pPixels[i] = other.pPixels[i];
 	}
 
-	CGrayImgData(int Height, int Width): nWidth(Width), nHeight(Height) {
+	CGrayImgData(int Height, int Width, T* pPix = NULL): nWidth(Width), nHeight(Height) {
 		pPixels = new T[Width * Height];
-		for (int i = 0; i < nWidth * nHeight; i++) pPixels[i] = 0;
+		if (pPix == NULL)
+			for (int i = 0; i < nWidth * nHeight; i++) pPixels[i] = 0;
+		else 
+			for (int i = 0; i < nWidth * nHeight; i++) pPixels[i] = pPix[i];
 	}
 
 	CGrayImgData& operator = (const CGrayImgData& other) {
@@ -42,6 +45,11 @@ public:
 		nHeight = Height, nWidth = Width;
 		pPixels = new T[nHeight * nWidth];
 		for (int i = 0; i < nHeight * nWidth; i++) pPixels[i] = data[i];
+	}
+
+	void CopyTo(CGrayImgData*& other) {
+		delete other;
+		other = new CGrayImgData<T>(nHeight, nWidth, pPixels);
 	}
 
 	void LoadFromCImage(CImage* pImg) {
