@@ -24,6 +24,8 @@ public:
 	CDigitalImageProcView* pView;
 	CGrayImgData<unsigned char>* pSrcImgData;
 	CGrayImgData<unsigned short>* pCustomData;
+	CGrayImgData<unsigned char>* pEnhancedSrcImgData;
+	CGrayImgData<unsigned short>* pEnhancedCustomData;
 	CImage* pResImg;
 	CImage* pSrcImg;
 	CImage* pEnhancedImg;
@@ -78,4 +80,5 @@ public:
 	afx_msg void OnClickSharpening();
 	afx_msg void OnUpdateDenoising(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateSharpening(CCmdUI* pCmdUI);
+	void Enhance();
 };

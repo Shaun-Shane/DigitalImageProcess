@@ -40,7 +40,7 @@ END_MESSAGE_MAP()
 
 CDigitalImageProcDoc::CDigitalImageProcDoc() noexcept : pView(NULL), pSrcImgData(NULL)
 , pResImg(NULL), pSrcImg(NULL), pCustomData(NULL), denoisingTag(0), sharpeningTag(0)
-, pEnhancedImg(NULL)
+, pEnhancedImg(NULL), pEnhancedSrcImgData(NULL), pEnhancedCustomData(NULL)
 {
 	// TODO: 在此添加一次性构造代码
 
@@ -53,6 +53,8 @@ CDigitalImageProcDoc::~CDigitalImageProcDoc()
 	delete pResImg;
 	delete pSrcImg;
 	delete pEnhancedImg;
+	delete pEnhancedCustomData;
+	delete pEnhancedSrcImgData;
 }
 
 BOOL CDigitalImageProcDoc::OnNewDocument()
@@ -341,6 +343,7 @@ void CDigitalImageProcDoc::OnClickDenoising()
 {
 	// TODO: 在此添加命令处理程序代码
 	denoisingTag ^= 1;
+	Enhance();
 }
 
 
@@ -348,6 +351,7 @@ void CDigitalImageProcDoc::OnClickSharpening()
 {
 	// TODO: 在此添加命令处理程序代码
 	sharpeningTag ^= 1;
+	Enhance();
 }
 
 
@@ -362,4 +366,19 @@ void CDigitalImageProcDoc::OnUpdateSharpening(CCmdUI* pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(sharpeningTag);
+}
+
+
+void CDigitalImageProcDoc::Enhance()
+{
+	// TODO: 在此处添加实现代码.
+	if (sharpeningTag || denoisingTag) {
+		if (denoisingTag) {
+
+		}
+		if (sharpeningTag) {
+
+		}
+		UpdateAllViews(NULL);
+	}
 }
