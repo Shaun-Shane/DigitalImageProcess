@@ -290,9 +290,6 @@ void CDigitalImageProcDoc::OnSaveResImg()
 void CDigitalImageProcDoc::OnGrayMapping()
 {
 	// TODO: 在此添加命令处理程序代码
-
-
-
 	CMappingDlg* mappingDlg = new CMappingDlg;
 	mappingDlg->Create(IDD_MappingDlg, pView);
 	mappingDlg->pDoc = this;
@@ -303,13 +300,11 @@ void CDigitalImageProcDoc::OnGrayMapping()
 void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
 {
 	// TODO: 在此处添加实现代码.
-	ReadCustomData(fileName);
 	CGrayMapping<unsigned short> myGrayMapping(*pCustomData);
 	myGrayMapping.GrayMapping(wndPos, wndLen);
 	myGrayMapping.SaveToCImage(pSrcImg);
 	if (pView->pSrcWnd == NULL) pView->OnSrcWnd();
-	if (denoisingTag || sharpeningTag) {
-		Enhance();
+	if ((denoisingTag || sharpeningTag) && pEnhancedCustomData != NULL) {
 		CGrayMapping<unsigned short> myGrayMapping(*pEnhancedCustomData);
 		myGrayMapping.GrayMapping(wndPos, wndLen);
 		myGrayMapping.SaveToCImage(pEnhancedImg);
@@ -321,6 +316,7 @@ void CDigitalImageProcDoc::GrayMapping(CString fileName, int wndPos, int wndLen)
 void CDigitalImageProcDoc::ReadCustomData(CString fileName)
 {
 	// TODO: 在此处添加实现代码.
+	delete pCustomData;
 	pCustomData = new CGrayImgData<unsigned short>;
 	std::string s = (CStringA)fileName;
 	const char* p = s.c_str();
@@ -341,6 +337,7 @@ void CDigitalImageProcDoc::ReadCustomData(CString fileName)
 
 	pCustomData->Create(h, w, tmp);
 	delete[] tmp;
+	Enhance();
 }
 
 
@@ -349,6 +346,7 @@ void CDigitalImageProcDoc::OnClickDenoising()
 {
 	// TODO: 在此添加命令处理程序代码
 	denoisingTag ^= 1;
+	Enhance();
 }
 
 
@@ -356,6 +354,7 @@ void CDigitalImageProcDoc::OnClickSharpening()
 {
 	// TODO: 在此添加命令处理程序代码
 	sharpeningTag ^= 1;
+	Enhance();
 }
 
 
@@ -379,7 +378,7 @@ void CDigitalImageProcDoc::Enhance()
 	if (pCustomData != NULL) {
 		CImgEnhance<unsigned short> customEnhance(*pCustomData);
 		if (denoisingTag) {
-			// customEnhance.AveragingFilter();	
+			//customEnhance.AveragingFilter();	
 			customEnhance.GaussFilter();
 		}
 		if (sharpeningTag) {

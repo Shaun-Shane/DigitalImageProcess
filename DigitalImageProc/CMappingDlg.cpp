@@ -57,6 +57,7 @@ void CMappingDlg::OnBnClickedUpload()
 		return;
 	fileName = strBKFileName;
 	this->SetDlgItemTextW(IDC_EDIT2, fileName);
+	pDoc->ReadCustomData(fileName);
 }
 
 
