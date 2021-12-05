@@ -21,24 +21,26 @@ public:
     }
 
     void SetSeed() {
-        static int blockSz = min(nHeight, nWidth) / 5;
+        static int blockSz = min(nHeight, nWidth) / 3;
         for (int x = 0; x < nHeight; x+= blockSz)
             for (int y = 0; y < nWidth; y+= blockSz) {
-                for (int i = x, tag = 1; tag && i < min(x + blockSz, nHeight); i++) {
+                int mi = 255;
+                pair<int, int> seedPos = { x, y };
+                for (int i = x; i < min(x + blockSz, nHeight); i++) {
                     for (int j = y; j < min(y + blockSz, nWidth); j++)
-                        if (pPixels[i * nWidth + j] == 60) {
-                            q.push({ i,j });
-                            tag = 0;
-                            break;
-                        }
-                }    
+                        if (pPixels[i * nWidth + j] < mi) {
+                            int mi = pPixels[i * nWidth + j];
+                            seedPos = { i, j };
+                       }
+                }
+                q.push(seedPos);
             }
     }
     
     void RegionGrowing() {
         const static int dx[] = { 1, -1, 0, 0 };
         const static int dy[] = { 0, 0, 1, -1 };
-        const static T th = 10;
+        const static T th = 5;
         SetSeed();
         while (!q.empty()) {
             auto cur = q.front();
@@ -49,7 +51,7 @@ public:
                 int ti = i + dx[d];
                 int tj = j + dy[d];
                 if (ti >= 0 && tj >= 0 && ti < nHeight && tj < nWidth) {
-                    if (pPixels[ti * nWidth + tj] != 0 && pPixels[ti * nWidth + tj] <= 125) {
+                    if (pPixels[ti * nWidth + tj] != 0) {
                         if(pPixels[i * nWidth + j] >= pPixels[ti * nWidth + tj] && pPixels[i * nWidth + j] - pPixels[ti * nWidth + tj] <= th)
                             q.push({ ti, tj });
                         else if (pPixels[i * nWidth + j] < pPixels[ti * nWidth + tj] && pPixels[ti * nWidth + tj] - pPixels[i * nWidth + j] <= th)
@@ -65,8 +67,7 @@ public:
     }
 
     void Segmentation() {
-        for (int i = 0; i < nHeight * nHeight; i++)
-            if (pPixels[i] != 0) pPixels[i] = 255;
+        RegionGrowing();
     }
 protected:
     queue< pair<int, int> > q;

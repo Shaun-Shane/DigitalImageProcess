@@ -84,4 +84,5 @@ public:
 	void Enhance();
 	afx_msg void OnSegimg();
 	void Segmentation();
+	afx_msg void OnSaveSegResult();
 };
