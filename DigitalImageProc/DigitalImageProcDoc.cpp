@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(CDigitalImageProcDoc, CDocument)
 	ON_COMMAND(ID_Sharpening, &CDigitalImageProcDoc::OnClickSharpening)
 	ON_UPDATE_COMMAND_UI(ID_Denoising, &CDigitalImageProcDoc::OnUpdateDenoising)
 	ON_UPDATE_COMMAND_UI(ID_Sharpening, &CDigitalImageProcDoc::OnUpdateSharpening)
+	ON_COMMAND(ID_SegImg, &CDigitalImageProcDoc::OnSegimg)
 END_MESSAGE_MAP()
 
 
@@ -386,4 +387,24 @@ void CDigitalImageProcDoc::Enhance()
 		}
 		customEnhance.CopyTo(pEnhancedCustomData);
 	}
+}
+
+
+void CDigitalImageProcDoc::OnSegimg()
+{
+	// TODO: 在此添加命令处理程序代码
+	OnOpenGrayImg();
+	Segmentation();
+}
+
+
+void CDigitalImageProcDoc::Segmentation()
+{
+	// TODO: 在此处添加实现代码.
+	if (pSrcImgData == NULL) return;
+	CImgSegmentation<unsigned char> mySeg(*pSrcImgData);
+	mySeg.RegionGrowing();
+	mySeg.SaveToCImage(pResImg);
+	if (pView->pResWnd == NULL) pView->OnResWnd();
+	UpdateAllViews(NULL);
 }

@@ -13,6 +13,7 @@
 #include "CGrayMapping.h"
 #include "CMappingDlg.h"
 #include "CImgEnhance.h"
+#include "CImgSegmentation.h"
 class CDigitalImageProcView;
 
 class CDigitalImageProcDoc : public CDocument
@@ -81,4 +82,6 @@ public:
 	afx_msg void OnUpdateDenoising(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateSharpening(CCmdUI* pCmdUI);
 	void Enhance();
+	afx_msg void OnSegimg();
+	void Segmentation();
 };

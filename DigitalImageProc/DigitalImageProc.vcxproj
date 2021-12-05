@@ -188,6 +188,7 @@
     <ClInclude Include="CGrayImgData.h" />
     <ClInclude Include="CGrayMapping.h" />
     <ClInclude Include="CImgEnhance.h" />
+    <ClInclude Include="CImgSegmentation.h" />
     <ClInclude Include="CImgWnd.h" />
     <ClInclude Include="CMappingDlg.h" />
     <ClInclude Include="CRotateDlg.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="CGrayImgData.cpp" />
     <ClCompile Include="CGrayMapping.cpp" />
     <ClCompile Include="CImgEnhance.cpp" />
+    <ClCompile Include="CImgSegmentation.cpp" />
     <ClCompile Include="CImgWnd.cpp" />
     <ClCompile Include="CMappingDlg.cpp" />
     <ClCompile Include="CRotateDlg.cpp" />

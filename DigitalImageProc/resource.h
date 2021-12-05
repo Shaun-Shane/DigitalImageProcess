@@ -48,13 +48,17 @@
 #define ID_Sharpening                   32797
 #define ID_Denoising                    32798
 #define ID_EnhancedImgWnd               32799
+#define ID_32800                        32800
+#define ID_32801                        32801
+#define ID_LoadSegImg                   32802
+#define ID_SegImg                       32803
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        318
-#define _APS_NEXT_COMMAND_VALUE         32800
+#define _APS_NEXT_COMMAND_VALUE         32804
 #define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
