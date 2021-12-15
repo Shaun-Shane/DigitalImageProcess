@@ -47,6 +47,7 @@ public:
             int i = cur.first;
             int j = cur.second;
             q.pop();
+            if (pPixels[i * nWidth + j] == 0) continue;
             for (int d = 0; d < 4; d++) {
                 int ti = i + dx[d];
                 int tj = j + dy[d];
@@ -56,7 +57,6 @@ public:
                             q.push({ ti, tj });
                         else if (pPixels[i * nWidth + j] < pPixels[ti * nWidth + tj] && pPixels[ti * nWidth + tj] - pPixels[i * nWidth + j] <= th)
                             q.push({ ti, tj });
-
                     }             
                 }
             }

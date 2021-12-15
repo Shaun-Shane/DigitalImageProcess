@@ -26,13 +26,17 @@ public:
         T* tmp = new T[nHeight * nWidth];
         for (int i = 0; i < nHeight * nWidth; i++) tmp[i] = pPixels[i];
         
-        for (int i = 0; i <= nHeight - coreSize; i++)
-            for (int j = 0; j <= nWidth - coreSize; j++) {
+        for (int i = -coreSize / 2; i < nHeight - coreSize / 2; i++)
+            for (int j = -coreSize / 2; j < nWidth - coreSize / 2; j++) {
                 vector<int> v;
                 for (int p = 0; p < coreSize; p++)
                     for (int q = 0; q < coreSize; q++)
-                        for (int k = 0; k < core[p][q]; k++)
-                            v.push_back(tmp[(i + p) * nWidth + j + q]);
+                        for (int k = 0; k < core[p][q]; k++) {
+                            if (i + p < 0 || i + p >= nHeight || j + q < 0 || j + q >= nWidth)
+                                v.push_back(0);
+                            else
+                                v.push_back(tmp[(i + p) * nWidth + j + q]);
+                        }
                 sort(v.begin(), v.end());
                 pPixels[(i + coreSize / 2) * nWidth + j + coreSize / 2] = v[v.size() /2];
             }
